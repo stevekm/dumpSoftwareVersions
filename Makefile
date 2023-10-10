@@ -28,10 +28,13 @@ build-all:
 	done ; \
 	done
 
+
+# docker build -t stevekm/dump-software-versions:latest .
 DOCKER_TAG:=stevekm/dump-software-versions:$(GIT_TAG)
 docker-build:
 	docker build -t $(DOCKER_TAG) .
 
+# docker push stevekm/dump-software-versions:latest
 docker-push:
 	docker push $(DOCKER_TAG)
 
