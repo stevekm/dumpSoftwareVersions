@@ -1,0 +1,85 @@
+data: |4-
+    <style>
+    #nf-core-versions tbody:nth-child(even) {
+    	background-color: #f2f2f2;
+    }
+    </style>
+    <table class="table" style="width:100%" id="nf-core-versions">
+    <thead>
+    	<tr>
+    		<th> Process Name </th>
+    		<th> Software </th>
+    		<th> Version  </th>
+    	</tr>
+    </thead>
+
+    <tbody>
+
+    <tr>
+    <td><samp>MAKE_VERSIONS1</samp></td>
+    <td><samp>MAKE_VERSIONS1</samp></td>
+    <td><samp>fooVersion</samp></td>
+    </tr>
+
+
+    <tr>
+    <td><samp></samp></td>
+    <td><samp>container</samp></td>
+    <td><samp>ubuntu:22.04</samp></td>
+    </tr>
+
+    </tbody>
+    <tbody>
+
+    <tr>
+    <td><samp>MAKE_VERSIONS2</samp></td>
+    <td><samp>MAKE_VERSIONS2</samp></td>
+    <td><samp>barVersion</samp></td>
+    </tr>
+
+
+    <tr>
+    <td><samp></samp></td>
+    <td><samp>container</samp></td>
+    <td><samp>ubuntu:22.04</samp></td>
+    </tr>
+
+    </tbody>
+    <tbody>
+
+    <tr>
+    <td><samp>Workflow</samp></td>
+    <td><samp>Nextflow</samp></td>
+    <td><samp>default-nxf-version</samp></td>
+    </tr>
+
+
+    <tr>
+    <td><samp></samp></td>
+    <td><samp>default-manifest-name</samp></td>
+    <td><samp>default-manifest-version</samp></td>
+    </tr>
+
+    </tbody>
+    <tbody>
+
+    <tr>
+    <td><samp>default-process-label</samp></td>
+    <td><samp>Go</samp></td>
+    <td><samp>go1.20</samp></td>
+    </tr>
+
+
+    <tr>
+    <td><samp></samp></td>
+    <td><samp>gopkg.in/yaml.v3</samp></td>
+    <td><samp>v3.0.1</samp></td>
+    </tr>
+
+    </tbody>
+    </table>
+description: are collected at run time from the software output.
+plot_type: html
+section_href: https://github.com/default-manifest-name
+section_name: default-manifest-name Software Versions
+
