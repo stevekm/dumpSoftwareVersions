@@ -1,19 +1,19 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"gopkg.in/yaml.v3" // NOTE: make sure this is the same one used in GetYAMLibVersion
 	"io/ioutil"
-	"strings"
 	"log"
 	"sort"
-	"flag"
+	"strings"
 
-	"runtime/debug"
 	"runtime"
+	"runtime/debug"
 )
 
-func LoadYAMLFile (filepath string, processLabel string, nxfVersion string, manifestName string, manifestVersion string) map[string]map[string]string {
+func LoadYAMLFile(filepath string, processLabel string, nxfVersion string, manifestName string, manifestVersion string) map[string]map[string]string {
 	// load versions from YAML file
 	var versions map[string]map[string]string
 
@@ -30,21 +30,19 @@ func LoadYAMLFile (filepath string, processLabel string, nxfVersion string, mani
 	// add some extra keys
 	yamlModule := GetYAMLibVersion()
 	versions[processLabel] = map[string]string{
-		"Go": runtime.Version(),
+		"Go":            runtime.Version(),
 		yamlModule.Path: yamlModule.Version,
 	}
 	versions["Workflow"] = map[string]string{
-		"Nextflow": nxfVersion,
+		"Nextflow":   nxfVersion,
 		manifestName: manifestVersion,
 	}
 
 	return versions
 }
 
-func AggregateByModule (versions map[string]map[string]string) map[string]map[string]string {
+func AggregateByModule(versions map[string]map[string]string) map[string]map[string]string {
 	// aggregate per-process; strip out subworkflow-strings and condense the map
-	// versionsByModule := make(map[interface{}]interface{})
-	// versionsByModule := make(map[string]interface{})
 	versionsByModule := make(map[string]map[string]string)
 
 	for key, value := range versions {
@@ -62,11 +60,10 @@ func AggregateByModule (versions map[string]map[string]string) map[string]map[st
 	return versionsByModule
 }
 
-func GetSortedKeys [V any](mapping map[string]V) []string {
+func GetSortedKeys[V any](mapping map[string]V) []string {
 	// get the string keys from a map and sort them
 	// https://go.dev/doc/tutorial/generics
 	// https://stackoverflow.com/questions/25772347/handle-maps-with-same-key-type-but-different-value-type
-	// mapping map[string]map[string]string
 	sortedKeys := []string{}
 	for key := range mapping {
 		sortedKeys = append(sortedKeys, key)
@@ -75,10 +72,10 @@ func GetSortedKeys [V any](mapping map[string]V) []string {
 	return sortedKeys
 }
 
-func MakeVersionHTML (versions map[string]map[string]string) string {
+func MakeVersionHTML(versions map[string]map[string]string) string {
 	// make an HTML table out of the entries
 	var html = []string{
-`
+		`
 <style>
 #nf-core-versions tbody:nth-child(even) {
 background-color: #f2f2f2;
@@ -109,12 +106,12 @@ background-color: #f2f2f2;
 
 			// I am not entirely sure why this part functions like this
 			processString := ""
-			if ( i == 0 ){
+			if i == 0 {
 				processString = process
 			}
 
 			htmlToolString := fmt.Sprintf(
-`
+				`
 <tr>
 <td><samp>%v</samp></td>
 <td><samp>%v</samp></td>
@@ -130,20 +127,17 @@ background-color: #f2f2f2;
 	return htmlString
 }
 
-
-
-func GetYAMLibVersion () debug.Module {
+func GetYAMLibVersion() debug.Module {
 	bi, ok := debug.ReadBuildInfo()
-    if !ok {
-        log.Fatal("Failed to read build info")
-    }
+	if !ok {
+		log.Fatal("Failed to read build info")
+	}
 
-    for _, dep := range bi.Deps {
-        // fmt.Printf("Dep: %+v\n", dep)
-		if (dep.Path == "gopkg.in/yaml.v3") {
+	for _, dep := range bi.Deps {
+		if dep.Path == "gopkg.in/yaml.v3" {
 			return *dep
 		}
-    }
+	}
 	return debug.Module{}
 }
 
@@ -157,7 +151,7 @@ func main() {
 
 	// first positional arg passed
 	inputYAMLFilepath := flag.Arg(0)
-	if ( inputYAMLFilepath == "" ){
+	if inputYAMLFilepath == "" {
 		log.Fatal("ERROR: Input YAML file path not provided")
 	}
 
@@ -174,9 +168,9 @@ func main() {
 	versionsMQC := map[string]string{
 		"section_name": fmt.Sprintf("%v Software Versions", *manifestName),
 		"section_href": fmt.Sprintf("https://github.com/%v", *manifestName),
-		"plot_type": "html",
-		"description": "are collected at run time from the software output.",
-		"data": htmlString,
+		"plot_type":    "html",
+		"description":  "are collected at run time from the software output.",
+		"data":         htmlString,
 	}
 
 	// convert to YAML data
