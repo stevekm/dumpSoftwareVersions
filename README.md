@@ -15,6 +15,41 @@ Output YAML is printed to stdout by default. You will want to pipe it to a file 
 - example input file: `example/collated_versions.yml`
 - example output: `example/software_versions_mqc.yml`
 
+## With Nextflow + MultiQC
+
+You can see an example of how to use this utility inside your Nextflow pipeline [here](https://github.com/stevekm/nextflow-demos/blob/master/dumpsoftwareversions/modules/local/steve-dumpSoftwareVersions.nf).
+
+A simple example [Nextflow process](https://www.nextflow.io/docs/latest/process.html) might look like this
+
+```groovy
+process DUMPSOFTWAREVERSIONS {
+    container "stevekm/dump-software-versions:0.1"
+
+    input:
+    path(versionsYAMLFile) // single file with collated version YAML from all previous tools in the pipeline
+
+    output:
+    path(output_filename), emit: mqc_yml
+
+    script:
+    output_filename = "software_versions_mqc.yml"
+    """
+    dumpSoftwareVersions \
+    -manifestName "${workflow.manifest.name}" \
+    -manifestVersion "${workflow.manifest.version}" \
+    -nxfVersion "${workflow.nextflow.version}" \
+    -processLabel "${task.process}" \
+    "${versionsYAMLFile}" > "${output_filename}"
+    """
+}
+```
+
+The output file here `software_versions_mqc.yml` can then be passed as an input item to your [MultiQC Nextflow process](https://github.com/stevekm/nextflow-demos/blob/master/dumpsoftwareversions/modules/nf-core/multiqc/main.nf).
+
+Once incorporated into MultiQC, you should get a nice table that looks something like this;
+
+<img width="1024" alt="Screenshot" src="https://github.com/stevekm/dumpSoftwareVersions/assets/10505524/569b0115-c9ed-4552-801d-33de68110d79">
+
 # Download
 
 Get it from Docker Hub here: https://hub.docker.com/repository/docker/stevekm/dump-software-versions/general
