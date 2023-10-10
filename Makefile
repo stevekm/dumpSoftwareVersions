@@ -2,7 +2,8 @@ SHELL:=/bin/bash
 .ONESHELL:
 
 # apply code formatting
-format:
+clean:
+	go mod tidy
 	gofmt -l -w .
 
 # > software_versions_mqc.yml
