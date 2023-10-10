@@ -1,0 +1,28 @@
+##
+## Build
+##
+# NOTE: make sure to specify the platform in case we build on M1 macOS
+# NOTE: make sure the base image lists amd64 on Docker Hub page! https://hub.docker.com/_/golang/tags
+FROM --platform=linux/amd64 golang:1.21-alpine AS build
+
+RUN apk update && apk add gcc musl-dev
+
+WORKDIR /app
+COPY go.mod ./
+COPY go.sum ./
+COPY main.go ./
+RUN go mod download
+# RUN go test -v ./...
+RUN go build -o /dumpSoftwareVersions main.go
+
+##
+## Deploy
+##
+# need alpine for using bash, otherwise use scratch
+# https://hub.docker.com/_/alpine/tags
+FROM --platform=linux/amd64 alpine:3.18.4
+RUN apk add bash
+COPY --from=build /dumpSoftwareVersions /usr/local/bin/dumpSoftwareVersions
+RUN ln -s /usr/local/bin/dumpSoftwareVersions
+RUN which dumpSoftwareVersions
+RUN dumpSoftwareVersions -h
