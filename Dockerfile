@@ -18,18 +18,20 @@ RUN go build -o /dumpSoftwareVersions main.go
 ##
 ## Deploy
 ##
+
 # need alpine for using bash, otherwise use scratch
 # https://hub.docker.com/_/alpine/tags
-
 # FROM --platform=linux/amd64 alpine:3.18.4
 # RUN apk add bash
 
-# FROM --platform=linux/amd64 ubuntu:22.04
-# RUN apt update -y && apt upgrade -y
+# NOTE: had issues with alpine on AWS Batch so use Debian or Ubuntu instead
+FROM --platform=linux/amd64 ubuntu:22.04
+RUN apt update -y && apt upgrade -y
 
+# Also consider Debian Slim
 # https://www.nextflow.io/docs/latest/tracing.html#trace-required-packages
-FROM --platform=linux/amd64 debian:bookworm-slim
-RUN apt update -y && apt upgrade -y && apt install -y procps
+# FROM --platform=linux/amd64 debian:bookworm-slim
+# RUN apt update -y && apt upgrade -y && apt install -y procps
 
 COPY --from=build /dumpSoftwareVersions /usr/local/bin/dumpSoftwareVersions
 RUN ln -s /usr/local/bin/dumpSoftwareVersions
