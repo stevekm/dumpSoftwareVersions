@@ -22,7 +22,9 @@ RUN go build -o /dumpSoftwareVersions main.go
 # https://hub.docker.com/_/alpine/tags
 # FROM --platform=linux/amd64 alpine:3.18.4
 # RUN apk add bash
-FROM --platform=linux/amd64 ubuntu:22.04
+# FROM --platform=linux/amd64 ubuntu:22.04
+# RUN apt update -y && apt upgrade -y
+FROM --platform=linux/amd64 debian:bookworm-slim
 RUN apt update -y && apt upgrade -y
 COPY --from=build /dumpSoftwareVersions /usr/local/bin/dumpSoftwareVersions
 RUN ln -s /usr/local/bin/dumpSoftwareVersions
